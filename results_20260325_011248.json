@@ -1,0 +1,22 @@
+{
+  "timestamp": "20260325_011248",
+  "summary": {
+    "total": 1,
+    "correct": 0,
+    "incorrect": 0,
+    "errors": 1,
+    "accuracy": 0
+  },
+  "results": [
+    {
+      "id": "normal_0001",
+      "index": 1,
+      "eq1": "x = ((y * (x * y)) * z) * w",
+      "eq2": "x = (y * (x * z)) * (y * w)",
+      "expected": true,
+      "predicted": null,
+      "status": "PARSE_ERROR",
+      "response": "__ERROR__: 429 Client Error: Too Many Requests for url: https://openrouter.ai/api/v1/chat/completions"
+    }
+  ]
+}

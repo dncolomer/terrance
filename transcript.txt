@@ -1,0 +1,575 @@
+[00:00.000 --> 00:09.080]  Hello again. Uh, so in my past few videos, I've been showing you examples of formalizations
+[00:09.080 --> 00:15.480]  of fairly simple statements in Lee, either statements in universal algebra that didn't
+[00:15.480 --> 00:23.480]  require many prerequisites or fairly well-known statements in rural analysis. Um, so here I would
+[00:23.480 --> 00:29.360]  like to give an example of a more realistic formalization task coming from one of my projects,
+[00:29.360 --> 00:35.880]  the polynomial-file minutiae project. So this is kind of a more, um, in the wild type of formalization
+[00:35.880 --> 00:44.960]  task. Um, and here, um, this task asked significantly trickier and, um, in particular, the AI tools
+[00:44.960 --> 00:51.440]  that were quite useful in the previous examples, they are of less utility, currently, at a current
+[00:51.440 --> 00:56.600]  level of development, although I do expect them to catch up and also be useful for these tools
+[00:56.600 --> 01:02.920]  as well. But so, um, basically I want to illustrate what it does like currently to, um, formalize
+[01:02.920 --> 01:11.080]  by hand, um, when, uh, the task is too difficult for current AI tools to, uh, to assist with,
+[01:11.080 --> 01:18.920]  uh, um, extensively. So the, um, uh, this project, uh, its primary goal has been completed. Uh, it,
+[01:18.920 --> 01:23.240]  um, we, we formalized the proof of something called the polynomial-file minutiae conjecture of
+[01:23.240 --> 01:28.280]  Catalan Martin, um, in the case of two torsion groups. Um, but then there was a generalization
+[01:28.280 --> 01:34.040]  to M torsion groups that is still in the process of being formalized. This is the blueprint
+[01:34.040 --> 01:39.880]  of the formalization process. At the bottom, we have the final theorem, which is a certain
+[01:39.880 --> 01:45.560]  theorem in combinatorics about sets of small doubling in, um, finite million groups of, of fixed
+[01:45.560 --> 01:52.360]  torsion. Uh, we will not focus so much on the specific, um, go here. Uh, but, as you can see from
+[01:52.360 --> 01:58.600]  the blueprint, uh, this theorem has been broken up into about 40 or 50 odd lemurs, uh, and definitions,
+[01:59.080 --> 02:04.120]  um, which will be proven separately. Uh, so some of these have ticks next to them, which means
+[02:04.120 --> 02:08.760]  that they're having correctly, they're having fully formalized. Uh, but about half of them still
+[02:08.840 --> 02:14.760]  do not have, um, that tick mark. And so we are, um, we have an incomplete proof currently.
+[02:15.560 --> 02:22.360]  So what I'd like to do is, is formalize some of the, um, intermediate, um, lemurs in here and,
+[02:22.360 --> 02:28.920]  and complete a few more of the tick marks. Um, I'll show you the graphical depiction of this project,
+[02:31.640 --> 02:37.160]  which may be a little bit more visually appealing. So this is the blueprint, not just of this
+[02:37.160 --> 02:43.400]  particularly m torgent, uh, result of the entire project. Um, every bubble here, um, represents one
+[02:43.400 --> 02:49.720]  lemma, um, or the rectangles, also represent definitions. Um, and they color coded. Uh, the green
+[02:49.720 --> 02:55.000]  bubbles are those, uh, bubbles that have been already proven in lean. And the blue bubbles are the
+[02:55.000 --> 02:59.560]  ones that, um, have been, uh, the theorem has been stated. The lemma has been stated, but not yet
+[02:59.560 --> 03:07.640]  proved. Um, so for example, uh, one of the, um, uh, lemurs I hope to, to prove today is the,
+[03:07.640 --> 03:12.840]  is this level 12.18, which, uh, proves a certain inequality between two different notions of
+[03:12.840 --> 03:20.120]  distance on, um, random variables on, um, on a certain appealing group. Now for this task,
+[03:20.120 --> 03:24.680]  we won't need to know precisely what these, um, definitions, uh, these distances are.
+[03:24.920 --> 03:29.000]  There are other lemmas elsewhere in this project that, um, that have already established
+[03:29.000 --> 03:33.720]  many facts about them, and we'll be taking those lemmas as a black box. Um, so this is one of the
+[03:33.720 --> 03:40.680]  advantages of a formalization scheme like this is that, um, it really, um, modularizes the task of
+[03:40.680 --> 03:45.880]  formalizing a very complicated theorem into us of atomic pieces where you don't need to understand
+[03:45.880 --> 03:52.840]  the entire project in order to fill one little piece. So, uh, we're going to go back to the, um,
+[03:53.800 --> 03:59.400]  this specific lemma that we're going to prove, which is, uh, this, uh, this lemma here,
+[03:59.400 --> 04:04.280]  which is taken by the way from directly from the paper that this is based on. So, um, over here,
+[04:04.840 --> 04:09.800]  um, um, I'm showing a paper of myself with Tim Gower's Ben Green and Freddie Manners.
+[04:10.280 --> 04:16.600]  Um, this 33 page paper is the paper of, of which is the proof in his derived, and this, uh,
+[04:16.840 --> 04:23.320]  um, claim here lemma 3.1 part two is the claim that, um, we are going to try to formalize.
+[04:23.960 --> 04:28.600]  Now, uh, this, um, this lemma in the paper, it only had a three-line proof.
+[04:29.320 --> 04:35.960]  Um, it's a consequence of a earlier statement part one, which I just spent most of this
+[04:35.960 --> 04:41.560]  morning formalizing actually. So, uh, part one has, uh, maybe a six-line truth, which, um,
+[04:41.560 --> 04:46.440]  I was good-rusted. It took me a long time I expected to formalize this, but now I'm back up to
+[04:46.440 --> 04:50.520]  speed. I expected this learn to be relatively, at this part, relatively short.
+[04:51.320 --> 04:59.560]  Um, so, um, the blueprint basically copies the, the, um, uh, this, the proof, the three-line proof from
+[04:59.560 --> 05:06.200]  the, um, from the paper, but it's, it's quite, uh, high-level. This is not really an atomic
+[05:06.840 --> 05:12.120]  line-by-line proof that we can, uh, just, uh, hope to get, for example, with AI to formalize.
+[05:12.920 --> 05:15.240]  Uh, but we'll see how we go with, uh, with this task.
+[05:16.520 --> 05:18.920]  So, uh, we're going to switch now to the IDE.
+[05:21.720 --> 05:26.520]  Okay. So, um, this is the current state of the formalization process. You can see
+[05:26.520 --> 05:32.120]  there's thousands of lines here already. Um, right here is the statement, um, that we're going
+[05:32.120 --> 05:38.440]  to try to prove that, uh, if you have, uh, that's number M bigger than two, and we have some, um,
+[05:38.520 --> 05:45.480]  M double, of, um, measure spaces, omega i, and, um, some random variables taking values in a
+[05:45.480 --> 05:49.880]  group G, G, has been defined previously to be an individual group. Then there's a certain, uh,
+[05:49.880 --> 05:56.040]  inequality between a sum of certain distances between X, J, and themselves, um, and then, um,
+[05:56.040 --> 06:00.200]  some constant times, another type of distance, this capital D is called multi, uh, multi-distance.
+[06:01.080 --> 06:06.840]  So, this is the claim. Um, based on my experience formalizing, uh, the previous, uh, claim,
+[06:06.840 --> 06:11.800]  uh, we're going to need some additional measurability hypotheses. Um, this statement was formalized
+[06:11.800 --> 06:17.400]  without, um, well, without proving that it was true. So, um, in the course of formalizing the
+[06:17.400 --> 06:22.040]  previous statement, I realized that I needed, uh, also some extra hypotheses, like such as, um,
+[06:22.040 --> 06:27.000]  omega being a probability measure, um, the excess needs are finite range, and be measurable,
+[06:27.000 --> 06:35.800]  and so forth. Uh, so we, we will add those in as needed. Um, so just for, um, uh, as a guide,
+[06:35.800 --> 06:41.560]  I'm going to, uh, just add in the sketch of proof, um, that we're going to use.
+[06:47.560 --> 06:54.760]  Okay. So, uh, the way we're going to prove this is, um, so this inequality is going to be a
+[06:54.760 --> 07:00.840]  consequence of the previous inequality. So, um, so, um, this is anybody controlling a diagonal
+[07:00.920 --> 07:06.520]  distance, d xj xj, uh, and we had a previous lemma, which controlled an off-diagonal distance,
+[07:06.520 --> 07:13.960]  d xj, uh, x minus xk. So, uh, the first step is to get a relation between them. Okay. So,
+[07:13.960 --> 07:21.240]  we're going to have a, um, have a claim. And for all j and k, um, from 1 to m,
+[07:22.120 --> 07:25.880]  actually from 0 to m minus 1, uh, I want to show that the, uh, distance,
+[07:25.880 --> 07:38.120]  uh, distance between xj and xj is bounded by two times the distance between xj and minus xk.
+[07:43.640 --> 07:50.280]  Okay. So, that's going to be our first step. Um, and that's using a previous, uh, tool, um,
+[07:50.280 --> 07:55.240]  which is firsted here, uh, as we were just trying to go. So, let's go look at it, uh,
+[07:55.320 --> 08:03.160]  over on, on the blueprint side. Okay. So, uh, we're going to use the lemma 3.18.
+[08:05.400 --> 08:09.560]  So, we're going to use a certain triangle inequality that this distance is known to satisfy.
+[08:10.360 --> 08:18.360]  Let's have a look at, uh, its lean code. All right. So, um, this, uh, this, um,
+[08:19.080 --> 08:25.000]  inequality has a lot of, uh, of hypotheses, but it is a, uh, triangle inequality
+[08:25.000 --> 08:32.280]  distance. Let me just copy this, uh, uh, description over here just for reference. Let's
+[08:32.280 --> 08:41.560]  go back to my IDE. All right. So, um, yeah, what we're going to do is that we're going to make
+[08:41.560 --> 08:49.880]  this as a calc walk. Okay. So, um, we're going to found distance between x and j and x of j by
+[08:49.880 --> 08:59.640]  the distance, uh, distance j and minus xk. And then the distance between minus xk.
+[09:02.360 --> 09:09.800]  xj. Uh, that was interesting. Uh, oh, okay. It seems to be good to cover. It may have actually done
+[09:09.800 --> 09:14.520]  that for us, except that it didn't quite work, but we'll fix that later. Uh, and then we need that to
+[09:14.520 --> 09:19.960]  equal, um, well, um, what's going to happen is that first of all, we're going to, we're going to
+[09:19.960 --> 09:26.120]  to symmetrize the, the, the, the, the description is also symmetric.
+[09:31.160 --> 09:35.720]  And then, uh, that's going to equal, uh, what we, uh, what we need, uh,
+[09:35.960 --> 09:44.360]  uh, okay, yeah, I'll show by a ring identity. Okay. So, uh, we need to use the triangle inequality.
+[09:44.360 --> 09:53.480]  Um, okay. So, um, get up, go by the, try to help us here. Uh, but it's, uh, uh, so we have
+[09:53.480 --> 10:02.840]  less of a look at the symbol. We need, uh, artist triangle, um, the first argument, uh, actually, uh,
+[10:03.000 --> 10:09.720]  this argument we need is actually, we need the measurability of the first purple xj. Uh, so let's
+[10:09.720 --> 10:15.320]  not, uh, okay, so actually, um, I think we just delete these, this might work. Let's see.
+[10:18.040 --> 10:27.400]  Um, so, uh, what for, uh, okay, we have some, uh, okay, we need measurability that we don't
+[10:27.480 --> 10:33.960]  actually have. Um, so, uh, we need to actually put that in, uh, let's see,
+[10:34.760 --> 10:39.000]  then what after we define x, we would like a measurability axiom, therefore i,
+[10:41.880 --> 10:44.520]  uh, we need x i to be measurable.
+[10:49.080 --> 10:56.040]  Put that in, uh, we can see if that works. Yeah. So, uh, what for, um, get up before, is that
+[10:56.040 --> 11:02.120]  some of these, um, arguments of this method, uh, did not need to be specified. So, if, if you look
+[11:02.120 --> 11:07.400]  at the, um, uh, the spelling of the theorem down here, you'll notice that some of the arguments are
+[11:07.400 --> 11:13.080]  in, um, parentheses, which means they are explicit, and some of them curly braces, um, which is
+[11:13.080 --> 11:18.280]  lean way of saying that, um, you don't need to specify these arguments. They will try to infer
+[11:18.360 --> 11:27.240]  those arguments from context, from all the other, uh, information. Okay, um, so the actual, in fact,
+[11:27.240 --> 11:35.720]  we're only two, um, arguments, uh, three actually, uh, we need measurability of, of, uh, x, y, and z. So
+[11:35.720 --> 11:41.560]  that's xj minus xk and xj, okay, so actually this one will not be right. Uh, this will be something
+[11:41.560 --> 11:49.160]  which we will work out, uh, in the h. Um, yeah, we need to, um, um, give this method a
+[11:49.160 --> 11:57.720]  measurability certificate for xj minus xk and xj. Um, but there is an additional problem because, um,
+[11:57.720 --> 12:02.360]  this theorem requires these random variables x, y and z to also have finite range, as you can
+[12:02.360 --> 12:07.400]  see over here, uh, and we didn't actually specify that as a hypothesis. So that actually we need to,
+[12:07.400 --> 12:20.680]  to add, um, so we're gonna add that as a hypothesis, and if we're lucky, um, lean will be able to
+[12:20.680 --> 12:32.360]  use that hypothesis and just, uh, fill in the, uh, okay, so, uh, now we're good, okay, um,
+[12:32.440 --> 12:38.680]  so we're not done, we have several goals, uh, but it did, uh, um, okay, it's complaining that we
+[12:38.680 --> 12:44.760]  also need, um, uh, these spaces to be probability measures, okay, so we also need to add that as a
+[12:44.760 --> 12:58.360]  hypothesis. Okay, um, I think it is probably measured. So, uh, we need the measure attached to,
+[12:58.360 --> 13:05.400]  these measure spaces to be a probability measure, uh, y is not, uh, here we go, and this one
+[13:05.400 --> 13:17.720]  again should be, um, again, um, okay, uh, so now we have much better shape. Uh, we actually just need
+[13:17.720 --> 13:25.480]  to show, um, one more goal, which is the visibility of negative xk. Um, now, uh, we do know that xk is
+[13:25.480 --> 13:32.120]  measurable, um, and I do know that there's a method called measurable, uh, okay, so there's a tool,
+[13:32.120 --> 13:39.160]  there's a demo precisely for this, which is the, um, it's called measurable.neg, um, which
+[13:39.160 --> 13:42.920]  says that if a function is measurable, then it's negative, it's also measurable, and now we've
+[13:42.920 --> 13:47.160]  reduced things to the measurable to xk, which has good health supplies, and that's exactly, uh,
+[13:47.160 --> 13:54.760]  hmsk. So that's the first step here. Um, now, uh, the next claim that I set up is we need to
+[13:54.760 --> 14:00.360]  show that this is equal to this, um, I can cancel for first term, it's not being relevant. Um,
+[14:04.600 --> 14:10.600]  so that should, um, and that should just be the symmetry. If I'm lucky, um,
+[14:10.600 --> 14:22.200]  Lee might be able to guess it from, no, okay, so, um, it probably has a bit of trouble because, um,
+[14:23.160 --> 14:28.280]  it needs some measurability to have other sneeze, which, uh, we don't have yet. Uh, okay, so, um,
+[14:29.480 --> 14:42.520]  let me go back to, uh, the blueprint. Um, so, um, yeah, one, one reason why the, um,
+[14:42.520 --> 14:46.840]  the usual tools are not super useful is because, um, for example, the ESAI large language
+[14:47.000 --> 14:52.680]  are not trained on the PFR project. Um, they do have, uh, a lot of information about math
+[14:52.680 --> 14:57.640]  lived, which is useful. But, uh, the lemmas we're going to use here are not in the central, um,
+[14:57.640 --> 15:03.160]  lean math library. They're in this separate PFR project. Um, in the future, I would expect to have,
+[15:03.160 --> 15:10.760]  AI models that can train locally on specific databases. Um, so, uh, uh, right now we actually need,
+[15:10.840 --> 15:14.280]  the symmetry lemma. It's got artists sim, uh, so we're just going to
+[15:17.080 --> 15:29.720]  apply that. Uh, why was, uh, Kongra, uh, Kongra, oh, um, okay.
+[15:33.480 --> 15:39.800]  Uh, Kongra was doing something that, uh, that was absorbing a lot of CPU. Um, I only work to cancel
+[15:39.800 --> 15:50.280]  one level of addition here. Um, okay. I, I just need this to be true. I will apply symmetry.
+[15:51.800 --> 15:59.880]  And I want to apply symmetry. Oh, I'm done. Okay. So I don't need anything else. All right. That's
+[15:59.880 --> 16:05.480]  nice. Um, slightly surprised. I thought I would need to prove measurability again. Uh, but maybe,
+[16:06.440 --> 16:11.320]  maybe this lemma, uh, okay. It looks like this lemma turns out to be true even without
+[16:11.320 --> 16:18.280]  measurability. Um, so one thing that that is interesting when you formalize in lean is that, uh,
+[16:18.280 --> 16:22.600]  sometimes the hypotheses that you think are needed to prove a lemma are not actually needed.
+[16:23.160 --> 16:28.920]  Um, so when proving theorems about random variables, you would expect you would need the random
+[16:28.920 --> 16:34.840]  variable to be measurable. Um, but surprisingly for some very basic identity, such as the symmetry,
+[16:34.840 --> 16:40.200]  uh, that's, that's actually not needed. Um, which is, uh, convenient because it simplifies certain
+[16:40.200 --> 16:53.640]  proofs. Okay. So we have proven this, um, specific, uh, claim. So, uh, um, the way we're going to
+[16:53.640 --> 17:00.760]  deal with this is that we're going to, to use the previous bound, which is this, um, and then insert,
+[17:00.760 --> 17:03.800]  uh, and set this inequality here. Um,
+[17:13.720 --> 17:17.160]  all right. So, uh, I think, uh,
+[17:19.560 --> 17:26.040]  all right, but this is a double sum. Um, and this, some m minus one here and here, there's a two
+[17:26.040 --> 17:41.480]  times m. Uh, so, I think what I need to do is to first sum this, uh, this inequality over all
+[17:41.480 --> 17:49.080]  j and k, which are not equal. So I'm going to have a second claim that if I sum over j and I sum
+[17:49.080 --> 18:16.040]  over k, um, and then, um, actually, um, I have some notation from this, my previous, um,
+[18:16.040 --> 18:23.720]  uh, uh, previous lemma, and I think, uh, I'm actually going to, to, to use, uh, to use this. Um,
+[18:24.680 --> 18:33.240]  so in my previous formalization, I set up actually, um, some notation for summing over j and k,
+[18:34.360 --> 18:39.480]  off diagonal sums, and then I, I proved some basic facts about them. Uh, I didn't realize that I
+[18:39.480 --> 18:46.840]  would use them again. Uh, so I put them inside this, this previous, uh, lemma, but actually, um,
+[18:46.840 --> 18:50.360]  I'm going to need these right now. So I'm going to actually,
+[18:50.360 --> 19:04.760]  um, read these out. Okay, so, um, that's about now I, uh, now I need, um, to change some text a little bit.
+[19:05.880 --> 19:14.360]  Okay, so, um, I'm going to define a sum notion. Um, yeah, later on, I will fix this, uh, I'll change
+[19:14.360 --> 19:20.760]  this sum to something, uh, uh, a bit more localized. Uh, I don't want to use up the word sum in the
+[19:20.760 --> 19:29.480]  global namespace, but, uh, um, uh, so let's take these little lemmas that I had previously
+[19:31.160 --> 19:35.320]  derived and convert them into external lemmas.
+[19:35.800 --> 19:49.480]  So I had some previous lemmas and I would actually, I'm going to sum implicit, uh, because
+[19:50.280 --> 19:57.720]  so that's the first lemma.
+[20:00.520 --> 20:05.560]  Convert similar here.
+[20:11.880 --> 20:14.440]  Um, I hope that if I can get, uh,
+[20:14.440 --> 20:24.600]  uh, co-pilot this morning.
+[20:45.000 --> 20:54.600]  Okay, I think I did what I wanted.
+[20:57.640 --> 21:01.480]  Uh, uh, two things. Oh, HM.
+[21:03.480 --> 21:06.840]  Oh, I need, uh, some cases I need a hypothesis, actually.
+[21:07.800 --> 21:10.920]  Um, uh, right. Yeah, some of these lemmas require
+[21:10.920 --> 21:14.440]  uh, and we get this one memory.
+[21:21.720 --> 21:24.440]  Okay, so I know quite a certain amount of
+[21:29.480 --> 21:31.480]  mixing.
+[21:40.920 --> 21:49.960]  Okay, I think it's an intro-inferring, uh, HM.
+[21:56.440 --> 22:00.200]  Okay, uh, why is this still comparing here?
+[22:01.640 --> 22:05.320]  No, then we'll complaints. Okay, so I'm with this outside.
+[22:06.120 --> 22:13.320]  This is why, um, so now,
+[22:21.160 --> 22:24.920]  You know these are what we need.
+[22:27.080 --> 22:28.920]  So hypothesis.
+[22:35.320 --> 22:42.320]  Okay, good, it looks like my previous code compiled.
+[22:42.320 --> 22:50.320]  Okay, there it is.
+[22:50.320 --> 23:00.320]  In the shoot down here, but I will do that later.
+[23:01.320 --> 23:08.320]  Okay, so the whole thing that I had this bound here, which is point wise for j and k.
+[23:08.320 --> 23:14.320]  And I had a previous tool, which I called some less than a equation.
+[23:14.320 --> 23:21.320]  That if you had two functions and one of them was point my spine about the other, then the sum of the most spun about the somewhere.
+[23:21.320 --> 23:26.320]  Some means this off diagonal sum, which is.
+[23:26.320 --> 23:28.320]  Kind of was here.
+[23:28.320 --> 23:33.320]  Next, I think yet.
+[23:41.320 --> 23:47.320]  So let's go ahead and.
+[23:47.320 --> 23:49.320]  Apply that.
+[23:49.320 --> 23:52.320]  So I have claim to.
+[23:52.320 --> 23:55.320]  Just want to just.
+[23:55.320 --> 24:09.320]  I just want to do some less than and equal to.
+[24:09.320 --> 24:12.320]  Okay, I do need this.
+[24:12.320 --> 24:19.320]  Just j not equal to k in here, but actually it's I think the easiest way to do that is to just insert it in the previous claim.
+[24:19.320 --> 24:22.320]  So.
+[24:22.320 --> 24:30.320]  One, I'm going to insert in this useless hypothesis.
+[24:30.320 --> 24:35.320]  It's harmless, but allows me to apply this.
+[24:35.320 --> 24:42.320]  And.
+[24:42.320 --> 24:46.320]  Why is it complaining now?
+[24:46.320 --> 24:50.320]  No, I think there's no argument.
+[24:50.320 --> 24:56.320]  See, so I'm less than you equal to.
+[24:56.320 --> 25:03.320]  First of all, I can take two functions and then this claim, if I do that.
+[25:03.320 --> 25:07.320]  So that's good. That should give me.
+[25:07.320 --> 25:09.320]  Climbing to.
+[25:09.320 --> 25:11.320]  I can see that.
+[25:11.320 --> 25:17.320]  It's not a good idea to call this sum because some actually mean something.
+[25:17.320 --> 25:29.320]  Let's say it's got off diagonal sum.
+[25:29.320 --> 25:35.320]  Okay.
+[25:35.320 --> 25:42.320]  Okay.
+[25:42.320 --> 25:49.320]  Okay.
+[25:49.320 --> 26:04.320]  Okay.
+[26:04.320 --> 26:08.320]  Fix all these.
+[26:08.320 --> 26:19.320]  Something's to you need to change as well.
+[26:19.320 --> 26:23.320]  It's got to change as well.
+[26:23.320 --> 26:26.320]  All right.
+[26:26.320 --> 26:29.320]  There it is.
+[26:29.320 --> 26:45.320]  So I can play back here.
+[26:45.320 --> 26:50.320]  Okay.
+[26:50.320 --> 26:58.320]  17.
+[26:58.320 --> 27:05.320]  Change as well.
+[27:05.320 --> 27:18.320]  Okay.
+[27:18.320 --> 27:23.320]  So just recycle this name space here.
+[27:23.320 --> 27:24.320]  Okay.
+[27:24.320 --> 27:26.320]  So let's see if.
+[27:26.320 --> 27:39.320]  I can pass properly.
+[27:39.320 --> 27:40.320]  All right.
+[27:40.320 --> 27:49.320]  So I've got this claim.
+[27:49.320 --> 27:53.320]  The way I want to use this.
+[27:53.320 --> 27:54.320]  Okay.
+[27:54.320 --> 27:56.320]  So I've got it.
+[27:56.320 --> 28:01.320]  On the other hand, I have this other.
+[28:01.320 --> 28:06.320]  I want to use the previous memory.
+[28:06.320 --> 28:10.320]  Which is that the sum is bounded by.
+[28:10.320 --> 28:13.320]  And that's a minus one.
+[28:13.320 --> 28:15.320]  Okay. So let's.
+[28:15.320 --> 28:20.320]  Let's make a new claim.
+[28:20.320 --> 28:23.320]  I think I'm off diagonal sum.
+[28:23.320 --> 28:26.320]  Of the function perhaps J.
+[28:26.320 --> 28:27.320]  Okay.
+[28:27.320 --> 28:30.320]  To the XJ.
+[28:30.320 --> 28:32.320]  X minus K.
+[28:32.320 --> 28:39.320]  This should be less than I think.
+[28:39.320 --> 28:42.320]  M times M minus one times.
+[28:42.320 --> 28:43.320]  Times this.
+[28:43.320 --> 29:00.320]  Okay.
+[29:00.320 --> 29:01.320]  Okay.
+[29:01.320 --> 29:08.320]  So this should come from the previous.
+[29:08.320 --> 29:15.320]  I want to apply this.
+[29:15.320 --> 29:16.320]  Okay.
+[29:16.320 --> 29:26.320]  It's not X minus K is minus XK.
+[29:26.320 --> 29:31.320]  There's a real company here.
+[29:31.320 --> 29:32.320]  Okay.
+[29:32.320 --> 29:42.320]  Not still completing.
+[29:42.320 --> 29:50.320]  H omega.
+[29:50.320 --> 29:51.320]  It's really a function.
+[29:51.320 --> 29:53.320]  I don't need to apply the lambda.
+[29:53.320 --> 30:18.320]  It's better to do that.
+[30:18.320 --> 30:19.320]  Okay.
+[30:19.320 --> 30:21.320]  I applied my previous lemma.
+[30:21.320 --> 30:22.320]  And it went through.
+[30:22.320 --> 30:25.320]  But I need to verify four things.
+[30:25.320 --> 30:26.320]  It's separate.
+[30:26.320 --> 30:31.320]  I can see them.
+[30:31.320 --> 30:32.320]  Okay.
+[30:32.320 --> 30:35.320]  The first thing I need to verify is that M is bigger than one.
+[30:35.320 --> 30:37.320]  I'm already assuming M is bigger than equal to two.
+[30:37.320 --> 30:40.320]  So that says linear arithmetic.
+[30:40.320 --> 30:42.320]  The next thing is I need to verify.
+[30:42.320 --> 30:43.320]  Majoribility.
+[30:43.320 --> 30:47.320]  Where is it?
+[30:47.320 --> 30:55.320]  So that is just the image.
+[30:55.320 --> 31:15.320]  Then what's the next goal?
+[31:15.320 --> 31:24.320]  Okay.
+[31:24.320 --> 31:25.320]  Okay.
+[31:25.320 --> 31:26.320]  Majoribility.
+[31:26.320 --> 31:30.320]  Oh, the probability measure hypothesis.
+[31:30.320 --> 31:31.320]  Yeah.
+[31:31.320 --> 31:39.320]  So that's probably just each problem.
+[31:39.320 --> 31:41.320]  And then finite range.
+[31:41.320 --> 31:43.320]  Well, that's supposed to be H.
+[31:44.320 --> 31:51.320]  I have all my hypothesis, but I think.
+[31:51.320 --> 32:01.320]  It doesn't like this one for some reason.
+[32:01.320 --> 32:05.320]  Alright.
+[32:05.320 --> 32:06.320]  Okay.
+[32:06.320 --> 32:10.320]  So I have these two claims.
+[32:10.320 --> 32:13.320]  I can bound this son by this.
+[32:13.320 --> 32:16.320]  Okay.
+[32:16.320 --> 32:20.320]  And then this guy I can simplify.
+[32:20.320 --> 32:24.320]  Because when you're taking off diagonal sum of a function that depends on your J.
+[32:24.320 --> 32:27.320]  That's actually just the sum of that function times M minus one.
+[32:27.320 --> 32:30.320]  So that's actually a claim that I needed previously.
+[32:30.320 --> 32:35.320]  I think that code is like off diagonal left.
+[32:35.320 --> 32:36.320]  Yeah.
+[32:36.320 --> 32:39.320]  Well, I'm here.
+[32:39.320 --> 32:42.320]  Just to say what this Linda turned that off.
+[32:42.320 --> 32:44.320]  Anything goes also.
+[32:44.320 --> 32:49.320]  Some similar problem here.
+[32:49.320 --> 32:50.320]  Okay.
+[32:50.320 --> 32:54.320]  So I'm just going to apply this.
+[32:54.320 --> 33:09.320]  Just lemma.
+[33:09.320 --> 33:12.320]  In doing so, I noticed that I need to implement once.
+[33:12.320 --> 33:13.320]  I'll just.
+[33:13.320 --> 33:22.320]  As a claim.
+[33:22.320 --> 33:43.320]  I need to hear.
+[33:43.320 --> 33:46.320]  Just need to wait for the.
+[33:46.320 --> 33:55.320]  Linda to catch up.
+[33:55.320 --> 34:01.320]  Okay, good.
+[34:01.320 --> 34:02.320]  Alright.
+[34:02.320 --> 34:09.320]  So we don't we now know that M minus one times this son is bound by the sum of twice.
+[34:09.320 --> 34:12.320]  Actually, minus X kept minus X K.
+[34:12.320 --> 34:15.320]  I need to pull the two out as well.
+[34:15.320 --> 34:18.320]  So I think I have a tool for that as well.
+[34:18.320 --> 34:20.320]  I'm lucky.
+[34:20.320 --> 34:22.320]  No, actually, I want to have some.
+[34:22.320 --> 34:23.320]  I want to have one division.
+[34:23.320 --> 34:24.320]  I need to.
+[34:24.320 --> 34:38.320]  I need a corresponding claim from obligation.
+[34:38.320 --> 34:41.320]  Yeah, that's not what I want.
+[34:41.320 --> 34:44.320]  So I want to have a function.
+[34:44.320 --> 34:48.320]  And a constant.
+[34:48.320 --> 34:51.320]  I want to say that I can pull out a constant.
+[34:51.320 --> 34:58.320]  I need to bound like this.
+[34:58.320 --> 35:18.320]  Okay.
+[35:18.320 --> 35:24.320]  It's my copy of my previous proof.
+[35:24.320 --> 35:34.320]  So I want the someone on the left.
+[35:34.320 --> 35:46.320]  What are you complaining about now?
+[35:46.320 --> 35:58.320]  No, three inputs.
+[35:58.320 --> 36:15.320]  I want to have them.
+[36:15.320 --> 36:38.320]  So I don't have a tool that allows me to port constants out of.
+[36:38.320 --> 36:44.320]  So I'm just going to apply that now.
+[36:44.320 --> 36:46.320]  Where was I down here?
+[36:46.320 --> 36:53.320]  I can just combine it with previous.
+[36:53.320 --> 37:03.320]  I really should call it mouse on or some.
+[37:03.320 --> 37:05.320]  I don't have a lot of applications.
+[37:05.320 --> 37:10.320]  So the name convention says to use both some.
+[37:10.320 --> 37:12.320]  I do that.
+[37:12.320 --> 37:16.320]  It's up to two rewrites now.
+[37:16.320 --> 37:25.320]  Let's see where this gets us.
+[37:25.320 --> 37:52.320]  Okay, it's complaining, but it's not telling you why it's complaining.
+[37:52.320 --> 37:58.320]  Okay.
+[37:58.320 --> 37:59.320]  Very good.
+[37:59.320 --> 38:05.320]  So I found this quantity by twice this quantity here.
+[38:05.320 --> 38:12.320]  So this and this need to combine to give me this.
+[38:12.320 --> 38:14.320]  So this can be done. Okay.
+[38:14.320 --> 38:16.320]  I'm really lucky.
+[38:16.320 --> 38:17.320]  I'll be able to.
+[38:17.320 --> 38:20.320]  I wasn't quite that lucky.
+[38:20.320 --> 38:28.320]  Okay, so this I think I can do by a calculator block.
+[38:28.320 --> 38:30.320]  So the summer want.
+[38:30.320 --> 38:53.320]  I'm just going to add and subtract.
+[38:53.320 --> 38:56.320]  Okay, one win for that.
+[38:56.320 --> 38:59.320]  What's supposed to happen is I'm going to add and subtract.
+[38:59.320 --> 39:11.320]  So I'm going to divide this.
+[39:11.320 --> 39:20.320]  I'm going to use.
+[39:20.320 --> 39:32.320]  So slow.
+[39:32.320 --> 39:53.320]  I need to look at what I'm trying to change together here.
+[39:53.320 --> 40:16.320]  I'm going to.
+[40:16.320 --> 40:22.320]  I'm waiting.
+[40:22.320 --> 40:24.320]  Oh, okay.
+[40:24.320 --> 40:27.320]  There's one annoying issue here is that.
+[40:27.320 --> 40:28.320]  M is an actual number.
+[40:28.320 --> 40:29.320]  And.
+[40:29.320 --> 40:31.320]  And minus one.
+[40:31.320 --> 40:37.320]  Is an actual number doesn't have an inverse.
+[40:37.320 --> 40:38.320]  That's annoying.
+[40:38.320 --> 40:41.320]  It's just temporarily.
+[40:41.320 --> 41:03.320]  Except making this real.
+[41:03.320 --> 41:10.320]  It's what I'm trying to do here.
+[41:10.320 --> 41:11.320]  Okay.
+[41:11.320 --> 41:13.320]  Mine's few times.
+[41:13.320 --> 41:18.320]  So.
+[41:18.320 --> 41:20.320]  I also ends being.
+[41:20.320 --> 41:21.320]  Carcer true.
+[41:21.320 --> 41:23.320]  We will number here.
+[41:23.320 --> 41:24.320]  Think.
+[41:24.320 --> 41:27.320]  Yeah.
+[41:27.320 --> 41:37.320]  All right.
+[41:37.320 --> 41:39.320]  That.
+[41:39.320 --> 41:47.320]  And if I use that other thing, I should be pounded.
+[41:47.320 --> 41:48.320]  I think I'm going to shake now.
+[41:48.320 --> 41:49.320]  Okay.
+[41:49.320 --> 41:51.320]  So.
+[41:51.320 --> 41:53.320]  Change together.
+[41:53.320 --> 41:54.320]  Various.
+[41:54.320 --> 42:05.320]  I need.
+[42:05.320 --> 42:06.320]  I was.
+[42:06.320 --> 42:08.320]  Yeah.
+[42:08.320 --> 42:14.320]  That should just cancel to what I want.
+[42:14.320 --> 42:22.320]  Okay.
+[42:22.320 --> 42:23.320]  I'll just emphasize.
+[42:23.320 --> 42:29.320]  There's a while minus one.
+[42:29.320 --> 42:32.320]  It's trying to subtract one from the entire numbers rather.
+[42:32.320 --> 42:34.320]  That's not what I want at all.
+[42:34.320 --> 42:42.320]  Let's do that.
+[43:12.320 --> 43:17.320]  Okay.
+[43:17.320 --> 43:18.320]  Okay.
+[43:18.320 --> 43:19.320]  It seems to be a bit confused.
+[43:19.320 --> 43:20.320]  Okay, let's finally come out.
+[43:20.320 --> 43:21.320]  All right.
+[43:21.320 --> 43:22.320]  So I've got these four.
+[43:22.320 --> 43:29.320]  To finish the proof here.
+[43:29.320 --> 43:34.320]  These are messages should go away soon, I think.
+[43:34.320 --> 43:41.320]  An artifact of some previous compilation.
+[43:41.320 --> 43:44.320]  Okay.
+[43:44.320 --> 43:48.320]  So another drawback of a reward formalization project is that once
+[43:48.320 --> 43:51.320]  you're a couple thousand lines in.
+[43:51.320 --> 43:53.320]  The compilations slow down quite a bit.
+[43:53.320 --> 44:06.320]  At least on my smaller laptop.
+[44:06.320 --> 44:11.320]  I think I said things up so that everything should be.
+[44:11.320 --> 44:12.320]  Good.
+[44:12.320 --> 44:13.320]  Okay.
+[44:13.320 --> 44:14.320]  So this.
+[44:14.320 --> 44:16.320]  I can't want to be in a quality given.
+[44:16.320 --> 44:24.320]  So this should just be a canceling operation.
+[44:24.320 --> 44:27.320]  Yeah.
+[44:27.320 --> 44:30.320]  But I need a mindset to not be zero.
+[44:30.320 --> 44:38.320]  That's going to be it.
+[44:38.320 --> 44:55.320]  So we'll put it up later.
+[44:55.320 --> 44:56.320]  Okay.
+[44:56.320 --> 45:14.320]  So.
+[45:14.320 --> 45:15.320]  Okay.
+[45:15.320 --> 45:19.320]  This identity should just be.
+[45:19.320 --> 45:25.320]  Okay.
+[45:26.320 --> 45:35.320]  Okay.
+[45:35.320 --> 45:44.320]  Okay.
+[45:44.320 --> 46:00.320]  Okay.
+[46:00.320 --> 46:03.320]  Okay, that does work.
+[46:03.320 --> 46:05.320]  Okay.
+[46:05.320 --> 46:07.320]  Now, I need M.
+[46:07.320 --> 46:08.320]  I just want to not be zero.
+[46:08.320 --> 46:12.320]  In fact, it's not very positive.
+[46:12.320 --> 46:18.320]  I'm really lucky that you just follow from the new orthotic.
+[46:18.320 --> 46:24.320]  Since I already know that M is bigger than 1.
+[46:24.320 --> 46:28.320]  There was a tiny issue because M here's a natural number.
+[46:28.320 --> 46:35.320]  And here M is a real number.
+[46:35.320 --> 46:46.320]  Hopefully the need is smart enough to figure out this out.
+[46:46.320 --> 46:56.320]  Of course, not.
+[46:56.320 --> 47:15.320]  Okay.
+[47:15.320 --> 47:18.320]  Here's where the fast enough sufferings.
+[47:18.320 --> 47:26.320]  It's like you're knowing.
+[47:26.320 --> 47:30.320]  M was already proven to be bigger than 1 or equal to 1 in the natural numbers.
+[47:30.320 --> 47:33.320]  But I needed to be true.
+[47:33.320 --> 47:35.320]  Also in the.
+[47:35.320 --> 47:38.320]  Reals and then I should be able to show that.
+[47:38.320 --> 47:52.320]  Therefore, M minus 1 is positive.
+[47:52.320 --> 47:53.320]  Seriously.
+[47:53.320 --> 48:00.320]  You really can't prove this in the new orthotic.
+[48:00.320 --> 48:04.320]  Oh, I want strictly greater.
+[48:04.320 --> 48:06.320]  Oh, okay.
+[48:06.320 --> 48:07.320]  No, I need.
+[48:07.320 --> 48:10.320]  Of course, I can't do this because it's equal to 1.
+[48:10.320 --> 48:11.320]  Yeah, sorry.
+[48:11.320 --> 48:15.320]  I'm really two.
+[48:15.320 --> 48:18.320]  I should come from a previous hypothesis.
+[48:18.320 --> 48:19.320]  Okay.
+[48:19.320 --> 48:21.320]  I feel that M is at least two.
+[48:21.320 --> 48:24.320]  Then you should be able to show that M is minus 1 is positive.
+[48:24.320 --> 48:25.320]  Good. All right.
+[48:25.320 --> 48:27.320]  So that was a bit silly, but.
+[48:27.320 --> 48:28.320]  Okay.
+[48:28.320 --> 48:31.320]  I had made a slight mistake here.
+[48:31.320 --> 48:33.320]  All right.
+[48:33.320 --> 48:35.320]  Okay. I can see that.
+[48:35.320 --> 48:37.320]  I'm going to need this elsewhere.
+[48:37.320 --> 48:53.320]  So I'm just going to pull it out.
+[48:53.320 --> 48:54.320]  All right.
+[48:54.320 --> 48:56.320]  So for the second claim.
+[48:56.320 --> 49:00.320]  This is factor of M minus 1 inverse that should just get.
+[49:01.320 --> 49:05.320]  It should happen.
+[49:05.320 --> 49:06.320]  Okay.
+[49:06.320 --> 49:07.320]  So those.
+[49:07.320 --> 49:15.320]  And then.
+[49:15.320 --> 49:19.320]  What's left should just be the claim, actually.
+[49:19.320 --> 49:20.320]  Keep on going.
+[49:20.320 --> 49:26.320]  Okay.
+[49:26.320 --> 49:27.320]  I can't go.
+[49:27.320 --> 49:36.320]  I already sold everything.
+[49:36.320 --> 49:37.320]  Oh.
+[49:37.320 --> 49:39.320]  Apparently, I need a positivity.
+[49:39.320 --> 49:41.320]  But this I can.
+[49:41.320 --> 49:42.320]  I can do.
+[49:42.320 --> 49:43.320]  All right.
+[49:43.320 --> 49:51.320]  So there's a method.
+[49:51.320 --> 49:53.320]  I'll just use the.
+[49:53.320 --> 49:54.320]  I do this.
+[49:54.320 --> 50:06.320]  Okay.
+[50:06.320 --> 50:09.320]  Of course, we want to show that some is not negative.
+[50:09.320 --> 50:18.320]  Then it suffices to show that the individual terms are not negative.
+[50:18.320 --> 50:21.320]  Oh, it didn't give me.
+[50:21.320 --> 50:22.320]  Yeah.
+[50:22.320 --> 50:26.320]  It gave me one of the things I needed.
+[50:26.320 --> 50:27.320]  All right.
+[50:27.320 --> 50:31.320]  Let's go.
+[50:31.320 --> 50:40.320]  Okay.
+[50:40.320 --> 50:43.320]  There's a method which I think is named something like fit set some non-neg.
+[50:43.320 --> 50:45.320]  Oh, in fact, it is that.
+[50:45.320 --> 50:46.320]  All right.
+[50:46.320 --> 50:48.320]  Yeah, someone on negative function is not negative.
+[50:48.320 --> 50:57.320]  So that's why I need to apply here.
+[50:57.320 --> 51:01.320]  Do that.
+[51:01.320 --> 51:05.320]  Hopefully that works.
+[51:05.320 --> 51:07.320]  There's more goals.
+[51:07.320 --> 51:13.320]  I was going to need m minus one, but less than two.
+[51:13.320 --> 51:14.320]  Wait.
+[51:14.320 --> 51:15.320]  Wait.
+[51:15.320 --> 51:17.320]  Actually, some bad things are happening here.
+[51:17.320 --> 51:21.320]  This is not what I want at all.
+[51:21.320 --> 51:23.320]  Yeah, yeah, yeah, yeah.
+[51:23.320 --> 51:29.320]  Oh, it's it's it's conquering too much.
+[51:29.320 --> 51:34.320]  I was trying to make m minus one bounded by two.
+[51:34.320 --> 51:36.320]  I should not use.
+[51:36.320 --> 51:51.320]  Okay.
+[51:51.320 --> 51:52.320]  Okay.
+[51:52.320 --> 51:55.320]  First thing I'm going to have to.
+[51:55.320 --> 51:58.320]  I need to regroup.
+[51:58.320 --> 52:01.320]  Application.
+[52:01.320 --> 52:02.320]  Like that.
+[52:02.320 --> 52:07.320]  And you do it twice.
+[52:07.320 --> 52:08.320]  See.
+[52:08.320 --> 52:09.320]  I just.
+[52:09.320 --> 52:16.320]  She can't quite just one level of this.
+[52:16.320 --> 52:18.320]  No such ability.
+[52:18.320 --> 52:22.320]  I want to cancel.
+[52:23.320 --> 52:26.320]  Right.
+[52:26.320 --> 52:31.320]  It actually solved it completely.
+[52:31.320 --> 52:32.320]  All right.
+[52:32.320 --> 52:36.320]  I guess it detected a claim, which is what's needed to finish.
+[52:36.320 --> 52:37.320]  Okay.
+[52:37.320 --> 52:39.320]  I will take that.
+[52:39.320 --> 52:42.320]  So here.
+[52:42.320 --> 52:50.320]  M minus one.
+[52:50.320 --> 52:57.320]  This.
+[52:57.320 --> 52:58.320]  Okay.
+[52:58.320 --> 53:01.320]  So again, I need to reassociate.
+[53:01.320 --> 53:09.320]  The right hand side.
+[53:40.320 --> 53:49.320]  Okay.
+[53:49.320 --> 53:57.320]  Okay.
+[54:09.320 --> 54:33.320]  Okay.
+[54:33.320 --> 54:36.320]  Did this.
+[54:36.320 --> 54:50.320]  Okay.
+[54:50.320 --> 54:52.320]  Should do.
+[54:52.320 --> 54:58.320]  Two pieces.
+[54:58.320 --> 55:04.320]  I do that.
+[55:04.320 --> 55:10.320]  Okay.
+[55:10.320 --> 55:13.320]  I'm lucky.
+[55:13.320 --> 55:18.320]  Should just follow from what the claims already have.
+[55:18.320 --> 55:21.320]  Good.
+[55:21.320 --> 55:26.320]  Last thing.
+[55:26.320 --> 55:27.320]  Lucky.
+[55:27.320 --> 55:30.320]  That should just be a cancelling.
+[55:30.320 --> 55:48.320]  Okay.
+[55:48.320 --> 55:50.320]  You're.
+[55:50.320 --> 55:51.320]  Got this far.
+[55:51.320 --> 55:52.320]  Okay.
+[55:52.320 --> 55:53.320]  I need to.
+[55:53.320 --> 55:54.320]  It's.
+[55:54.320 --> 55:58.320]  It didn't completely close because I just.
+[55:58.320 --> 56:04.320]  Okay.
+[56:04.320 --> 56:07.320]  All right.
+[56:07.320 --> 56:12.320]  So I did actually finish the proof of this, but it was.
+[56:12.320 --> 56:16.320]  More annoying and expected.
+[56:16.320 --> 56:17.320]  Okay.
+[56:17.320 --> 56:18.320]  Yeah.
+[56:18.320 --> 56:21.320]  So that is a real world formalization task.
+[56:21.320 --> 56:23.320]  So lots of friction.
+[56:23.320 --> 56:24.320]  Still, unfortunately.
+[56:24.320 --> 56:26.320]  But it is doable.
+[56:26.320 --> 56:31.320]  Okay.
+[56:31.320 --> 56:34.320]  One of them are in one hour.
+[56:34.320 --> 56:36.320]  There is a small Z and L, which I'll fix later.
+[56:36.320 --> 56:38.320]  It says it's not super interesting.
+[56:38.320 --> 56:39.320]  Okay.
+[56:39.320 --> 56:41.320]  But thank you for watching.

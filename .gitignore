@@ -1,17 +1,5 @@
 # Environment
 .env
 
-# Results & Logs
-results_*.json
-logs.txt
-
-# Data (optional)
-# normal.jsonl
-
 # OS
 .DS_Store
-
-# Audio/Transcripts
-*.mp3
-transcript.txt
-*.txt

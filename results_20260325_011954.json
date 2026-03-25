@@ -1,0 +1,42 @@
+{
+  "timestamp": "20260325_011954",
+  "summary": {
+    "total": 3,
+    "correct": 1,
+    "incorrect": 2,
+    "errors": 0,
+    "accuracy": 33.33333333333333
+  },
+  "results": [
+    {
+      "id": "normal_0001",
+      "index": 1,
+      "eq1": "x = ((y * (x * y)) * z) * w",
+      "eq2": "x = (y * (x * z)) * (y * w)",
+      "expected": true,
+      "predicted": "false",
+      "status": "FAIL",
+      "response": "FALSE"
+    },
+    {
+      "id": "normal_0002",
+      "index": 2,
+      "eq1": "x * y = z * (w * (u * u))",
+      "eq2": "x * (y * y) = (z * w) * z",
+      "expected": true,
+      "predicted": "false",
+      "status": "FAIL",
+      "response": "FALSE"
+    },
+    {
+      "id": "normal_0003",
+      "index": 3,
+      "eq1": "x = x * (y * ((z * x) * x))",
+      "eq2": "x = (y * ((z * z) * y)) * w",
+      "expected": false,
+      "predicted": "false",
+      "status": "PASS",
+      "response": "FALSE"
+    }
+  ]
+}

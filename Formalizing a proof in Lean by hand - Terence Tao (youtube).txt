@@ -1,0 +1,575 @@
+Hello again. Uh, so in my past few videos, I've been showing you examples of formalizations
+of fairly simple statements in Lee, either statements in universal algebra that didn't
+require many prerequisites or fairly well-known statements in rural analysis. Um, so here I would
+like to give an example of a more realistic formalization task coming from one of my projects,
+the polynomial-file minutiae project. So this is kind of a more, um, in the wild type of formalization
+task. Um, and here, um, this task asked significantly trickier and, um, in particular, the AI tools
+that were quite useful in the previous examples, they are of less utility, currently, at a current
+level of development, although I do expect them to catch up and also be useful for these tools
+as well. But so, um, basically I want to illustrate what it does like currently to, um, formalize
+by hand, um, when, uh, the task is too difficult for current AI tools to, uh, to assist with,
+uh, um, extensively. So the, um, uh, this project, uh, its primary goal has been completed. Uh, it,
+um, we, we formalized the proof of something called the polynomial-file minutiae conjecture of
+Catalan Martin, um, in the case of two torsion groups. Um, but then there was a generalization
+to M torsion groups that is still in the process of being formalized. This is the blueprint
+of the formalization process. At the bottom, we have the final theorem, which is a certain
+theorem in combinatorics about sets of small doubling in, um, finite million groups of, of fixed
+torsion. Uh, we will not focus so much on the specific, um, go here. Uh, but, as you can see from
+the blueprint, uh, this theorem has been broken up into about 40 or 50 odd lemurs, uh, and definitions,
+um, which will be proven separately. Uh, so some of these have ticks next to them, which means
+that they're having correctly, they're having fully formalized. Uh, but about half of them still
+do not have, um, that tick mark. And so we are, um, we have an incomplete proof currently.
+So what I'd like to do is, is formalize some of the, um, intermediate, um, lemurs in here and,
+and complete a few more of the tick marks. Um, I'll show you the graphical depiction of this project,
+which may be a little bit more visually appealing. So this is the blueprint, not just of this
+particularly m torgent, uh, result of the entire project. Um, every bubble here, um, represents one
+lemma, um, or the rectangles, also represent definitions. Um, and they color coded. Uh, the green
+bubbles are those, uh, bubbles that have been already proven in lean. And the blue bubbles are the
+ones that, um, have been, uh, the theorem has been stated. The lemma has been stated, but not yet
+proved. Um, so for example, uh, one of the, um, uh, lemurs I hope to, to prove today is the,
+is this level 12.18, which, uh, proves a certain inequality between two different notions of
+distance on, um, random variables on, um, on a certain appealing group. Now for this task,
+we won't need to know precisely what these, um, definitions, uh, these distances are.
+There are other lemmas elsewhere in this project that, um, that have already established
+many facts about them, and we'll be taking those lemmas as a black box. Um, so this is one of the
+advantages of a formalization scheme like this is that, um, it really, um, modularizes the task of
+formalizing a very complicated theorem into us of atomic pieces where you don't need to understand
+the entire project in order to fill one little piece. So, uh, we're going to go back to the, um,
+this specific lemma that we're going to prove, which is, uh, this, uh, this lemma here,
+which is taken by the way from directly from the paper that this is based on. So, um, over here,
+um, um, I'm showing a paper of myself with Tim Gower's Ben Green and Freddie Manners.
+Um, this 33 page paper is the paper of, of which is the proof in his derived, and this, uh,
+um, claim here lemma 3.1 part two is the claim that, um, we are going to try to formalize.
+Now, uh, this, um, this lemma in the paper, it only had a three-line proof.
+Um, it's a consequence of a earlier statement part one, which I just spent most of this
+morning formalizing actually. So, uh, part one has, uh, maybe a six-line truth, which, um,
+I was good-rusted. It took me a long time I expected to formalize this, but now I'm back up to
+speed. I expected this learn to be relatively, at this part, relatively short.
+Um, so, um, the blueprint basically copies the, the, um, uh, this, the proof, the three-line proof from
+the, um, from the paper, but it's, it's quite, uh, high-level. This is not really an atomic
+line-by-line proof that we can, uh, just, uh, hope to get, for example, with AI to formalize.
+Uh, but we'll see how we go with, uh, with this task.
+So, uh, we're going to switch now to the IDE.
+Okay. So, um, this is the current state of the formalization process. You can see
+there's thousands of lines here already. Um, right here is the statement, um, that we're going
+to try to prove that, uh, if you have, uh, that's number M bigger than two, and we have some, um,
+M double, of, um, measure spaces, omega i, and, um, some random variables taking values in a
+group G, G, has been defined previously to be an individual group. Then there's a certain, uh,
+inequality between a sum of certain distances between X, J, and themselves, um, and then, um,
+some constant times, another type of distance, this capital D is called multi, uh, multi-distance.
+So, this is the claim. Um, based on my experience formalizing, uh, the previous, uh, claim,
+uh, we're going to need some additional measurability hypotheses. Um, this statement was formalized
+without, um, well, without proving that it was true. So, um, in the course of formalizing the
+previous statement, I realized that I needed, uh, also some extra hypotheses, like such as, um,
+omega being a probability measure, um, the excess needs are finite range, and be measurable,
+and so forth. Uh, so we, we will add those in as needed. Um, so just for, um, uh, as a guide,
+I'm going to, uh, just add in the sketch of proof, um, that we're going to use.
+Okay. So, uh, the way we're going to prove this is, um, so this inequality is going to be a
+consequence of the previous inequality. So, um, so, um, this is anybody controlling a diagonal
+distance, d xj xj, uh, and we had a previous lemma, which controlled an off-diagonal distance,
+d xj, uh, x minus xk. So, uh, the first step is to get a relation between them. Okay. So,
+we're going to have a, um, have a claim. And for all j and k, um, from 1 to m,
+actually from 0 to m minus 1, uh, I want to show that the, uh, distance,
+uh, distance between xj and xj is bounded by two times the distance between xj and minus xk.
+Okay. So, that's going to be our first step. Um, and that's using a previous, uh, tool, um,
+which is firsted here, uh, as we were just trying to go. So, let's go look at it, uh,
+over on, on the blueprint side. Okay. So, uh, we're going to use the lemma 3.18.
+So, we're going to use a certain triangle inequality that this distance is known to satisfy.
+Let's have a look at, uh, its lean code. All right. So, um, this, uh, this, um,
+inequality has a lot of, uh, of hypotheses, but it is a, uh, triangle inequality
+distance. Let me just copy this, uh, uh, description over here just for reference. Let's
+go back to my IDE. All right. So, um, yeah, what we're going to do is that we're going to make
+this as a calc walk. Okay. So, um, we're going to found distance between x and j and x of j by
+the distance, uh, distance j and minus xk. And then the distance between minus xk.
+xj. Uh, that was interesting. Uh, oh, okay. It seems to be good to cover. It may have actually done
+that for us, except that it didn't quite work, but we'll fix that later. Uh, and then we need that to
+equal, um, well, um, what's going to happen is that first of all, we're going to, we're going to
+to symmetrize the, the, the, the, the description is also symmetric.
+And then, uh, that's going to equal, uh, what we, uh, what we need, uh,
+uh, okay, yeah, I'll show by a ring identity. Okay. So, uh, we need to use the triangle inequality.
+Um, okay. So, um, get up, go by the, try to help us here. Uh, but it's, uh, uh, so we have
+less of a look at the symbol. We need, uh, artist triangle, um, the first argument, uh, actually, uh,
+this argument we need is actually, we need the measurability of the first purple xj. Uh, so let's
+not, uh, okay, so actually, um, I think we just delete these, this might work. Let's see.
+Um, so, uh, what for, uh, okay, we have some, uh, okay, we need measurability that we don't
+actually have. Um, so, uh, we need to actually put that in, uh, let's see,
+then what after we define x, we would like a measurability axiom, therefore i,
+uh, we need x i to be measurable.
+Put that in, uh, we can see if that works. Yeah. So, uh, what for, um, get up before, is that
+some of these, um, arguments of this method, uh, did not need to be specified. So, if, if you look
+at the, um, uh, the spelling of the theorem down here, you'll notice that some of the arguments are
+in, um, parentheses, which means they are explicit, and some of them curly braces, um, which is
+lean way of saying that, um, you don't need to specify these arguments. They will try to infer
+those arguments from context, from all the other, uh, information. Okay, um, so the actual, in fact,
+we're only two, um, arguments, uh, three actually, uh, we need measurability of, of, uh, x, y, and z. So
+that's xj minus xk and xj, okay, so actually this one will not be right. Uh, this will be something
+which we will work out, uh, in the h. Um, yeah, we need to, um, um, give this method a
+measurability certificate for xj minus xk and xj. Um, but there is an additional problem because, um,
+this theorem requires these random variables x, y and z to also have finite range, as you can
+see over here, uh, and we didn't actually specify that as a hypothesis. So that actually we need to,
+to add, um, so we're gonna add that as a hypothesis, and if we're lucky, um, lean will be able to
+use that hypothesis and just, uh, fill in the, uh, okay, so, uh, now we're good, okay, um,
+so we're not done, we have several goals, uh, but it did, uh, um, okay, it's complaining that we
+also need, um, uh, these spaces to be probability measures, okay, so we also need to add that as a
+hypothesis. Okay, um, I think it is probably measured. So, uh, we need the measure attached to,
+these measure spaces to be a probability measure, uh, y is not, uh, here we go, and this one
+again should be, um, again, um, okay, uh, so now we have much better shape. Uh, we actually just need
+to show, um, one more goal, which is the visibility of negative xk. Um, now, uh, we do know that xk is
+measurable, um, and I do know that there's a method called measurable, uh, okay, so there's a tool,
+there's a demo precisely for this, which is the, um, it's called measurable.neg, um, which
+says that if a function is measurable, then it's negative, it's also measurable, and now we've
+reduced things to the measurable to xk, which has good health supplies, and that's exactly, uh,
+hmsk. So that's the first step here. Um, now, uh, the next claim that I set up is we need to
+show that this is equal to this, um, I can cancel for first term, it's not being relevant. Um,
+so that should, um, and that should just be the symmetry. If I'm lucky, um,
+Lee might be able to guess it from, no, okay, so, um, it probably has a bit of trouble because, um,
+it needs some measurability to have other sneeze, which, uh, we don't have yet. Uh, okay, so, um,
+let me go back to, uh, the blueprint. Um, so, um, yeah, one, one reason why the, um,
+the usual tools are not super useful is because, um, for example, the ESAI large language
+are not trained on the PFR project. Um, they do have, uh, a lot of information about math
+lived, which is useful. But, uh, the lemmas we're going to use here are not in the central, um,
+lean math library. They're in this separate PFR project. Um, in the future, I would expect to have,
+AI models that can train locally on specific databases. Um, so, uh, uh, right now we actually need,
+the symmetry lemma. It's got artists sim, uh, so we're just going to
+apply that. Uh, why was, uh, Kongra, uh, Kongra, oh, um, okay.
+Uh, Kongra was doing something that, uh, that was absorbing a lot of CPU. Um, I only work to cancel
+one level of addition here. Um, okay. I, I just need this to be true. I will apply symmetry.
+And I want to apply symmetry. Oh, I'm done. Okay. So I don't need anything else. All right. That's
+nice. Um, slightly surprised. I thought I would need to prove measurability again. Uh, but maybe,
+maybe this lemma, uh, okay. It looks like this lemma turns out to be true even without
+measurability. Um, so one thing that that is interesting when you formalize in lean is that, uh,
+sometimes the hypotheses that you think are needed to prove a lemma are not actually needed.
+Um, so when proving theorems about random variables, you would expect you would need the random
+variable to be measurable. Um, but surprisingly for some very basic identity, such as the symmetry,
+uh, that's, that's actually not needed. Um, which is, uh, convenient because it simplifies certain
+proofs. Okay. So we have proven this, um, specific, uh, claim. So, uh, um, the way we're going to
+deal with this is that we're going to, to use the previous bound, which is this, um, and then insert,
+uh, and set this inequality here. Um,
+all right. So, uh, I think, uh,
+all right, but this is a double sum. Um, and this, some m minus one here and here, there's a two
+times m. Uh, so, I think what I need to do is to first sum this, uh, this inequality over all
+j and k, which are not equal. So I'm going to have a second claim that if I sum over j and I sum
+over k, um, and then, um, actually, um, I have some notation from this, my previous, um,
+uh, uh, previous lemma, and I think, uh, I'm actually going to, to, to use, uh, to use this. Um,
+so in my previous formalization, I set up actually, um, some notation for summing over j and k,
+off diagonal sums, and then I, I proved some basic facts about them. Uh, I didn't realize that I
+would use them again. Uh, so I put them inside this, this previous, uh, lemma, but actually, um,
+I'm going to need these right now. So I'm going to actually,
+um, read these out. Okay, so, um, that's about now I, uh, now I need, um, to change some text a little bit.
+Okay, so, um, I'm going to define a sum notion. Um, yeah, later on, I will fix this, uh, I'll change
+this sum to something, uh, uh, a bit more localized. Uh, I don't want to use up the word sum in the
+global namespace, but, uh, um, uh, so let's take these little lemmas that I had previously
+derived and convert them into external lemmas.
+So I had some previous lemmas and I would actually, I'm going to sum implicit, uh, because
+so that's the first lemma.
+Convert similar here.
+Um, I hope that if I can get, uh,
+uh, co-pilot this morning.
+Okay, I think I did what I wanted.
+Uh, uh, two things. Oh, HM.
+Oh, I need, uh, some cases I need a hypothesis, actually.
+Um, uh, right. Yeah, some of these lemmas require
+uh, and we get this one memory.
+Okay, so I know quite a certain amount of
+mixing.
+Okay, I think it's an intro-inferring, uh, HM.
+Okay, uh, why is this still comparing here?
+No, then we'll complaints. Okay, so I'm with this outside.
+This is why, um, so now,
+You know these are what we need.
+So hypothesis.
+Okay, good, it looks like my previous code compiled.
+Okay, there it is.
+In the shoot down here, but I will do that later.
+Okay, so the whole thing that I had this bound here, which is point wise for j and k.
+And I had a previous tool, which I called some less than a equation.
+That if you had two functions and one of them was point my spine about the other, then the sum of the most spun about the somewhere.
+Some means this off diagonal sum, which is.
+Kind of was here.
+Next, I think yet.
+So let's go ahead and.
+Apply that.
+So I have claim to.
+Just want to just.
+I just want to do some less than and equal to.
+Okay, I do need this.
+Just j not equal to k in here, but actually it's I think the easiest way to do that is to just insert it in the previous claim.
+So.
+One, I'm going to insert in this useless hypothesis.
+It's harmless, but allows me to apply this.
+And.
+Why is it complaining now?
+No, I think there's no argument.
+See, so I'm less than you equal to.
+First of all, I can take two functions and then this claim, if I do that.
+So that's good. That should give me.
+Climbing to.
+I can see that.
+It's not a good idea to call this sum because some actually mean something.
+Let's say it's got off diagonal sum.
+Okay.
+Okay.
+Okay.
+Okay.
+Fix all these.
+Something's to you need to change as well.
+It's got to change as well.
+All right.
+There it is.
+So I can play back here.
+Okay.
+17.
+Change as well.
+Okay.
+So just recycle this name space here.
+Okay.
+So let's see if.
+I can pass properly.
+All right.
+So I've got this claim.
+The way I want to use this.
+Okay.
+So I've got it.
+On the other hand, I have this other.
+I want to use the previous memory.
+Which is that the sum is bounded by.
+And that's a minus one.
+Okay. So let's.
+Let's make a new claim.
+I think I'm off diagonal sum.
+Of the function perhaps J.
+Okay.
+To the XJ.
+X minus K.
+This should be less than I think.
+M times M minus one times.
+Times this.
+Okay.
+Okay.
+So this should come from the previous.
+I want to apply this.
+Okay.
+It's not X minus K is minus XK.
+There's a real company here.
+Okay.
+Not still completing.
+H omega.
+It's really a function.
+I don't need to apply the lambda.
+It's better to do that.
+Okay.
+I applied my previous lemma.
+And it went through.
+But I need to verify four things.
+It's separate.
+I can see them.
+Okay.
+The first thing I need to verify is that M is bigger than one.
+I'm already assuming M is bigger than equal to two.
+So that says linear arithmetic.
+The next thing is I need to verify.
+Majoribility.
+Where is it?
+So that is just the image.
+Then what's the next goal?
+Okay.
+Okay.
+Majoribility.
+Oh, the probability measure hypothesis.
+Yeah.
+So that's probably just each problem.
+And then finite range.
+Well, that's supposed to be H.
+I have all my hypothesis, but I think.
+It doesn't like this one for some reason.
+Alright.
+Okay.
+So I have these two claims.
+I can bound this son by this.
+Okay.
+And then this guy I can simplify.
+Because when you're taking off diagonal sum of a function that depends on your J.
+That's actually just the sum of that function times M minus one.
+So that's actually a claim that I needed previously.
+I think that code is like off diagonal left.
+Yeah.
+Well, I'm here.
+Just to say what this Linda turned that off.
+Anything goes also.
+Some similar problem here.
+Okay.
+So I'm just going to apply this.
+Just lemma.
+In doing so, I noticed that I need to implement once.
+I'll just.
+As a claim.
+I need to hear.
+Just need to wait for the.
+Linda to catch up.
+Okay, good.
+Alright.
+So we don't we now know that M minus one times this son is bound by the sum of twice.
+Actually, minus X kept minus X K.
+I need to pull the two out as well.
+So I think I have a tool for that as well.
+I'm lucky.
+No, actually, I want to have some.
+I want to have one division.
+I need to.
+I need a corresponding claim from obligation.
+Yeah, that's not what I want.
+So I want to have a function.
+And a constant.
+I want to say that I can pull out a constant.
+I need to bound like this.
+Okay.
+It's my copy of my previous proof.
+So I want the someone on the left.
+What are you complaining about now?
+No, three inputs.
+I want to have them.
+So I don't have a tool that allows me to port constants out of.
+So I'm just going to apply that now.
+Where was I down here?
+I can just combine it with previous.
+I really should call it mouse on or some.
+I don't have a lot of applications.
+So the name convention says to use both some.
+I do that.
+It's up to two rewrites now.
+Let's see where this gets us.
+Okay, it's complaining, but it's not telling you why it's complaining.
+Okay.
+Very good.
+So I found this quantity by twice this quantity here.
+So this and this need to combine to give me this.
+So this can be done. Okay.
+I'm really lucky.
+I'll be able to.
+I wasn't quite that lucky.
+Okay, so this I think I can do by a calculator block.
+So the summer want.
+I'm just going to add and subtract.
+Okay, one win for that.
+What's supposed to happen is I'm going to add and subtract.
+So I'm going to divide this.
+I'm going to use.
+So slow.
+I need to look at what I'm trying to change together here.
+I'm going to.
+I'm waiting.
+Oh, okay.
+There's one annoying issue here is that.
+M is an actual number.
+And.
+And minus one.
+Is an actual number doesn't have an inverse.
+That's annoying.
+It's just temporarily.
+Except making this real.
+It's what I'm trying to do here.
+Okay.
+Mine's few times.
+So.
+I also ends being.
+Carcer true.
+We will number here.
+Think.
+Yeah.
+All right.
+That.
+And if I use that other thing, I should be pounded.
+I think I'm going to shake now.
+Okay.
+So.
+Change together.
+Various.
+I need.
+I was.
+Yeah.
+That should just cancel to what I want.
+Okay.
+I'll just emphasize.
+There's a while minus one.
+It's trying to subtract one from the entire numbers rather.
+That's not what I want at all.
+Let's do that.
+Okay.
+Okay.
+It seems to be a bit confused.
+Okay, let's finally come out.
+All right.
+So I've got these four.
+To finish the proof here.
+These are messages should go away soon, I think.
+An artifact of some previous compilation.
+Okay.
+So another drawback of a reward formalization project is that once
+you're a couple thousand lines in.
+The compilations slow down quite a bit.
+At least on my smaller laptop.
+I think I said things up so that everything should be.
+Good.
+Okay.
+So this.
+I can't want to be in a quality given.
+So this should just be a canceling operation.
+Yeah.
+But I need a mindset to not be zero.
+That's going to be it.
+So we'll put it up later.
+Okay.
+So.
+Okay.
+This identity should just be.
+Okay.
+Okay.
+Okay.
+Okay.
+Okay, that does work.
+Okay.
+Now, I need M.
+I just want to not be zero.
+In fact, it's not very positive.
+I'm really lucky that you just follow from the new orthotic.
+Since I already know that M is bigger than 1.
+There was a tiny issue because M here's a natural number.
+And here M is a real number.
+Hopefully the need is smart enough to figure out this out.
+Of course, not.
+Okay.
+Here's where the fast enough sufferings.
+It's like you're knowing.
+M was already proven to be bigger than 1 or equal to 1 in the natural numbers.
+But I needed to be true.
+Also in the.
+Reals and then I should be able to show that.
+Therefore, M minus 1 is positive.
+Seriously.
+You really can't prove this in the new orthotic.
+Oh, I want strictly greater.
+Oh, okay.
+No, I need.
+Of course, I can't do this because it's equal to 1.
+Yeah, sorry.
+I'm really two.
+I should come from a previous hypothesis.
+Okay.
+I feel that M is at least two.
+Then you should be able to show that M is minus 1 is positive.
+Good. All right.
+So that was a bit silly, but.
+Okay.
+I had made a slight mistake here.
+All right.
+Okay. I can see that.
+I'm going to need this elsewhere.
+So I'm just going to pull it out.
+All right.
+So for the second claim.
+This is factor of M minus 1 inverse that should just get.
+It should happen.
+Okay.
+So those.
+And then.
+What's left should just be the claim, actually.
+Keep on going.
+Okay.
+I can't go.
+I already sold everything.
+Oh.
+Apparently, I need a positivity.
+But this I can.
+I can do.
+All right.
+So there's a method.
+I'll just use the.
+I do this.
+Okay.
+Of course, we want to show that some is not negative.
+Then it suffices to show that the individual terms are not negative.
+Oh, it didn't give me.
+Yeah.
+It gave me one of the things I needed.
+All right.
+Let's go.
+Okay.
+There's a method which I think is named something like fit set some non-neg.
+Oh, in fact, it is that.
+All right.
+Yeah, someone on negative function is not negative.
+So that's why I need to apply here.
+Do that.
+Hopefully that works.
+There's more goals.
+I was going to need m minus one, but less than two.
+Wait.
+Wait.
+Actually, some bad things are happening here.
+This is not what I want at all.
+Yeah, yeah, yeah, yeah.
+Oh, it's it's it's conquering too much.
+I was trying to make m minus one bounded by two.
+I should not use.
+Okay.
+Okay.
+First thing I'm going to have to.
+I need to regroup.
+Application.
+Like that.
+And you do it twice.
+See.
+I just.
+She can't quite just one level of this.
+No such ability.
+I want to cancel.
+Right.
+It actually solved it completely.
+All right.
+I guess it detected a claim, which is what's needed to finish.
+Okay.
+I will take that.
+So here.
+M minus one.
+This.
+Okay.
+So again, I need to reassociate.
+The right hand side.
+Okay.
+Okay.
+Okay.
+Did this.
+Okay.
+Should do.
+Two pieces.
+I do that.
+Okay.
+I'm lucky.
+Should just follow from what the claims already have.
+Good.
+Last thing.
+Lucky.
+That should just be a cancelling.
+Okay.
+You're.
+Got this far.
+Okay.
+I need to.
+It's.
+It didn't completely close because I just.
+Okay.
+All right.
+So I did actually finish the proof of this, but it was.
+More annoying and expected.
+Okay.
+Yeah.
+So that is a real world formalization task.
+So lots of friction.
+Still, unfortunately.
+But it is doable.
+Okay.
+One of them are in one hour.
+There is a small Z and L, which I'll fix later.
+It says it's not super interesting.
+Okay.
+But thank you for watching.
