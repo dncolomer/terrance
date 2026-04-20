@@ -2,8 +2,10 @@
 import argparse
 import json
 import os
+import random
 import sys
-import time
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -30,13 +32,16 @@ def load_prompt_template(prompt_file: str) -> str:
         return f.read()
 
 
-def load_dataset(jsonl_file: str, limit: int):
+def load_dataset(jsonl_file: str, limit: int, randomize: bool = False, seed: int = None):
     entries = []
     with open(jsonl_file, "r") as f:
         for line in f:
             entries.append(json.loads(line))
-            if len(entries) >= limit:
-                break
+    if randomize:
+        rng = random.Random(seed)
+        entries = rng.sample(entries, min(limit, len(entries)))
+    else:
+        entries = entries[:limit]
     return entries
 
 
@@ -96,37 +101,35 @@ def log_error(entry_id: str, response: str, status: str):
         f.write("-" * 50 + "\n")
 
 
-def evaluate(api_key: str, model: str, entries: list, prompt_template: str):
-    results = []
+def evaluate(api_key: str, model: str, entries: list, prompt_template: str, workers: int = 10):
+    results = [None] * len(entries)
     correct = 0
     incorrect = 0
     errors = 0
+    completed = 0
+    lock = threading.Lock()
 
     total = len(entries)
-    print(f"Testing {total} entries...\n")
+    print(f"Testing {total} entries with {workers} concurrent workers...\n")
 
-    for i, entry in enumerate(entries):
+    def process_entry(i, entry):
         eq1 = entry["equation1"]
         eq2 = entry["equation2"]
         expected = entry["answer"]
 
         prompt = prompt_template.replace("{{eq1}}", eq1).replace("{{eq2}}", eq2)
-
         response = call_llm(api_key, model, prompt)
         predicted = parse_response(response)
 
         if predicted is None:
             status = "PARSE_ERROR"
-            errors += 1
             log_error(entry["id"], response, status)
         elif predicted == str(expected).lower():
             status = "PASS"
-            correct += 1
         else:
             status = "FAIL"
-            incorrect += 1
 
-        result = {
+        return i, {
             "id": entry["id"],
             "index": entry["index"],
             "eq1": eq1,
@@ -136,12 +139,30 @@ def evaluate(api_key: str, model: str, entries: list, prompt_template: str):
             "status": status,
             "response": response
         }
-        results.append(result)
 
-        bar_len = 30
-        filled = int(bar_len * (i + 1) / total)
-        bar = "█" * filled + "░" * (bar_len - filled)
-        print(f"[{bar}] {i + 1}/{total} - {status}")
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(process_entry, i, entry): i for i, entry in enumerate(entries)}
+
+        for future in as_completed(futures):
+            idx, result = future.result()
+            results[idx] = result
+
+            with lock:
+                if result["status"] == "PASS":
+                    correct += 1
+                elif result["status"] == "FAIL":
+                    incorrect += 1
+                else:
+                    errors += 1
+                completed += 1
+
+                acc = correct / (correct + incorrect) * 100 if (correct + incorrect) > 0 else 0
+                bar_len = 30
+                filled = int(bar_len * completed / total)
+                bar = "█" * filled + "░" * (bar_len - filled)
+                exp_str = "T" if str(result["expected"]).lower() == "true" else "F"
+                pred_str = (result["predicted"][0].upper() if result["predicted"] else "?")
+                print(f"[{bar}] {completed}/{total}  {result['status']:<11}  exp={exp_str} pred={pred_str}  |  ✓{correct} ✗{incorrect} ?{errors}  acc={acc:.1f}%")
 
     return results, correct, incorrect, errors
 
@@ -231,6 +252,9 @@ def main():
     parser.add_argument("--prompt", default="baseprompt.md", help="Prompt template file")
     parser.add_argument("--dataset", default="normal.jsonl", help="Dataset file")
     parser.add_argument("--timeout", type=int, default=30, help="API timeout in seconds")
+    parser.add_argument("--random", action="store_true", help="Randomly sample entries from dataset")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducible sampling")
+    parser.add_argument("--workers", type=int, default=10, help="Number of concurrent API requests")
     parser.add_argument("--distill", action="store_true", help="Generate distilled prompt after evaluation")
     parser.add_argument("--distill-model", default="x-ai/grok-4.20-multi-agent-beta", help="Model to use for distillation")
     args = parser.parse_args()
@@ -239,9 +263,9 @@ def main():
     print(f"Using model: {model}\n")
 
     prompt_template = load_prompt_template(args.prompt)
-    entries = load_dataset(args.dataset, args.entries)
+    entries = load_dataset(args.dataset, args.entries, randomize=args.random, seed=args.seed)
 
-    results, correct, incorrect, errors = evaluate(api_key, model, entries, prompt_template)
+    results, correct, incorrect, errors = evaluate(api_key, model, entries, prompt_template, workers=args.workers)
 
     print_stats(len(results), correct, incorrect, errors)
     save_results(results, correct, incorrect, errors)
